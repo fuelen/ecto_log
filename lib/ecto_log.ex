@@ -309,7 +309,7 @@ defmodule EctoLog do
     bindings
     |> Enum.with_index(1)
     |> Enum.reduce(query, fn {binding, index}, query ->
-      String.replace(query, "$#{index}", stringify(binding, :root))
+      String.replace(query, "$#{index}", stringify(binding, :root), global: false)
     end)
   end
 
@@ -324,7 +324,7 @@ defmodule EctoLog do
     path = Briefly.create!(prefix: "EctoLog")
     File.write!(path, query)
 
-    "sqlfmt --use-spaces --print-width=80 < #{path}"
+    "sqlfmt --use-spaces --print-width=80 --tab-width=2 < #{path}"
     |> String.to_charlist()
     |> :os.cmd()
     |> to_string()
